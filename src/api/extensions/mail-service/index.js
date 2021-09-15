@@ -43,47 +43,29 @@ module.exports = ({ config }) => {
       apiStatus(res, `Target email address (${email}) is not from the whitelist!`, 500)
       return
     }
-
-    // check if provided email addresses actually exist
-    EmailCheck(userData.sourceAddress)
-      .then(response => {
-        if (response) return EmailCheck(userData.targetAddress)
-        else {
-          apiStatus(res, 'Source email address is invalid!', 500)
-        }
-      })
-      .then(response => {
-        if (response) {
-          let transporter = NodeMailer.createTransport({
-            host,
-            port,
-            secure,
-            auth: {
-              user,
-              pass
-            }
-          })
-          const mailOptions = {
-            from: userData.sourceAddress,
-            to: userData.targetAddress,
-            subject: userData.subject,
-            text: userData.emailText
-          }
-          transporter.sendMail(mailOptions, (error) => {
-            if (error) {
-              apiStatus(res, error, 500)
-              return
-            }
-            apiStatus(res, 'OK', 200)
-            transporter.close()
-          })
-        } else {
-          apiStatus(res, 'Target email address is invalid!', 500)
-        }
-      })
-      .catch(() => {
-        apiStatus(res, 'Invalid email address is provided!', 500)
-      })
+    let transporter = NodeMailer.createTransport({
+      host,
+      port,
+      secure,
+      auth: {
+        user,
+        pass
+      }
+    })
+    const mailOptions = {
+      from: userData.sourceAddress,
+      to: userData.targetAddress,
+      subject: userData.subject,
+      text: userData.emailText
+    }
+    transporter.sendMail(mailOptions, (error) => {
+      if (error) {
+        apiStatus(res, error, 500)
+        return
+      }
+      apiStatus(res, 'OK', 200)
+      transporter.close()
+    })
   })
 
   return msApi
