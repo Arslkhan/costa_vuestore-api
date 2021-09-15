@@ -9,7 +9,7 @@ module.exports = ({ config }) => {
     try {
       try {
         const emailDetails = req.body;
-        console.log('emailDetails', emailDetails, config.magento2.api.url)
+        console.log('emailDetails', emailDetails, config.extensions.contactEmail.endpoint)
         const emailResponse = await axios.post(
           config.extensions.contactEmail.endpoint + '/rest/default/V1/w10/contactus',
           emailDetails,
@@ -19,7 +19,7 @@ module.exports = ({ config }) => {
             }
           }
         );
-        console.log('orderResponse', emailResponse.data);
+        console.log('emailResponse', emailResponse);
         apiStatus(res, emailResponse.data);
       } catch (error) {
         console.error(error);
