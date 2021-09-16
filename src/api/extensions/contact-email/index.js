@@ -4,7 +4,7 @@ import axios from 'axios';
 
 module.exports = ({ config }) => {
   const api = Router()
-
+  console.log('emailDetails api', api)
   api.post('/sendEmail', async (req, res) => {
     try {
       try {
