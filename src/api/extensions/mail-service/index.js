@@ -25,7 +25,7 @@ module.exports = ({ config }) => {
     if (!userData.token || userData.token !== token) {
       apiStatus(res, 'Email is not authorized!', 500)
     }
-    const { host, port, secure, user, pass } = config.extensions.mailService.transport
+    const {host, port, secure, user, pass} = config.extensions.mailService.transport
     if (!host || !port || !user || !pass) {
       apiStatus(res, 'No transport is defined for mail service!', 500)
     }
@@ -67,36 +67,36 @@ module.exports = ({ config }) => {
       apiStatus(res, 'OK', 200)
       transporter.close()
     })
-  }),
-    msApi.post('/sendContactEmail', async (req, res) => {
+  })
+  msApi.post('/sendContactEmail', async (req, res) => {
+    try {
       try {
-        try {
-          const emailDetails = req.body;
-          console.log('emailDetails', emailDetails, config.extensions.contactEmail.endpoint)
-          const emailResponse = await axios.post(
-            config.extensions.contactEmail.endpoint + '/rest/default/V1/w10/contactus',
-            emailDetails,
-            {
-              headers: {
-                'Content-type': 'application/json'
-              }
+        const emailDetails = req.body;
+        console.log('emailDetails', emailDetails, config.extensions.contactEmail.endpoint)
+        const emailResponse = await axios.post(
+          config.extensions.contactEmail.endpoint + '/rest/default/V1/w10/contactus',
+          emailDetails,
+          {
+            headers: {
+              'Content-type': 'application/json'
             }
-          );
-          console.log('emailResponse', emailResponse);
-          apiStatus(res, emailResponse.data);
-        } catch (error) {
-          console.error(error);
-          apiStatus(
-            res,
-            'This Some Error Occurred while processing contact us email',
-            500
-          );
-        }
+          }
+        );
+        console.log('emailResponse', emailResponse);
+        apiStatus(res, emailResponse.data);
       } catch (error) {
         console.error(error);
-        apiStatus(res, 'That Some Error Occurred while sending contact us email', 500);
+        apiStatus(
+          res,
+          'This Some Error Occurred while processing contact us email',
+          500
+        );
       }
-    });
+    } catch (error) {
+      console.error(error);
+      apiStatus(res, 'That Some Error Occurred while sending contact us email', 500);
+    }
+  });
 
   return msApi
 }
