@@ -68,7 +68,7 @@ module.exports = ({ config }) => {
       transporter.close()
     })
   })
-  msApi.post('/sendContactEmail', async (req, res) => {
+  msApi.post('/send-contact-email', async (req, res) => {
     try {
       try {
         const emailDetails = req.body;
