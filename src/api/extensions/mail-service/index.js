@@ -3,7 +3,7 @@ import { Router } from 'express'
 // import EmailCheck from 'email-check'
 import jwt from 'jwt-simple'
 // import NodeMailer from 'nodemailer'
-// import axios from 'axios';
+import axios from 'axios';
 
 module.exports = ({ config }) => {
   const msApi = Router()
@@ -21,36 +21,36 @@ module.exports = ({ config }) => {
    * POST send an email
    */
   msApi.post('/send-email', (req, res) => {
-    apiStatus(res, 'Its getting Hit', 200);
-    // const userData = req.body
+//     apiStatus(res, 'Its getting Hit', 200);
+//     const userData = req.body
     // console.log('Send email API here')
-    // try {
-    //   try {
-    //     const emailDetails = req.body;
-    //     console.log('emailDetails', emailDetails, config.extensions.contactEmail.endpoint)
-    //     const emailResponse = axios.post(
-    //       'https://secure.w10.world/rest/default/V1/w10/contactus',
-    //       emailDetails,
-    //       {
-    //         headers: {
-    //           'Content-type': 'application/json'
-    //         }
-    //       }
-    //     );
-    //     console.log('emailResponse', emailResponse);
-    //     apiStatus(res, emailResponse.data);
-    //   } catch (error) {
-    //     console.error(error);
-    //     apiStatus(
-    //       res,
-    //       'This Some Error Occurred while processing contact us email',
-    //       500
-    //     );
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   apiStatus(res, 'That Some Error Occurred while sending contact us email', 500);
-    // }
+    try {
+      try {
+        const emailDetails = req.body;
+//         console.log('emailDetails', emailDetails, config.extensions.contactEmail.endpoint)
+        const emailResponse = axios.post(
+          'https://secure.w10.world/rest/default/V1/w10/contactus',
+          emailDetails,
+          {
+            headers: {
+              'Content-type': 'application/json'
+            }
+          }
+        );
+//         console.log('emailResponse', emailResponse);
+        apiStatus(res, emailResponse.data);
+      } catch (error) {
+        console.error(error);
+        apiStatus(
+          res,
+          'This Some Error Occurred while processing contact us email',
+          500
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      apiStatus(res, 'That Some Error Occurred while sending contact us email', 500);
+    }
     /*if (!userData.token || userData.token !== token) {
       apiStatus(res, 'Email is not authorized!', 500)
     }
