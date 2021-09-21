@@ -1,8 +1,8 @@
 import { apiStatus } from '../../../lib/util'
 import { Router } from 'express'
-import EmailCheck from 'email-check'
+// import EmailCheck from 'email-check'
 import jwt from 'jwt-simple'
-import NodeMailer from 'nodemailer'
+// import NodeMailer from 'nodemailer'
 import axios from 'axios';
 
 module.exports = ({ config }) => {
@@ -21,12 +21,13 @@ module.exports = ({ config }) => {
    * POST send an email
    */
   msApi.post('/send-email', (req, res) => {
-    // const userData = req.body
-    console.log('Send email API here')
+//     apiStatus(res, 'Its getting Hit', 200);
+//     const userData = req.body
+    // console.log('Send email API here')
     try {
       try {
         const emailDetails = req.body;
-        console.log('emailDetails', emailDetails, config.extensions.contactEmail.endpoint)
+//         console.log('emailDetails', emailDetails, config.extensions.contactEmail.endpoint)
         const emailResponse = axios.post(
           'https://secure.w10.world/rest/default/V1/w10/contactus',
           emailDetails,
@@ -36,7 +37,7 @@ module.exports = ({ config }) => {
             }
           }
         );
-        console.log('emailResponse', emailResponse);
+//         console.log('emailResponse', emailResponse);
         apiStatus(res, emailResponse.data);
       } catch (error) {
         console.error(error);
