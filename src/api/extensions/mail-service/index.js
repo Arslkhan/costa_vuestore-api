@@ -24,6 +24,7 @@ module.exports = ({ config }) => {
     try {
       try {
         const emailDetails = req.body;
+        console.error('emailDetails', emailDetails);
         const emailResponse = axios.post(
           'https://secure.w10.world/rest/default/V1/w10/contactus',
           emailDetails,
@@ -33,6 +34,7 @@ module.exports = ({ config }) => {
             }
           }
         );
+        console.error('emailResponse', emailResponse.data);
         apiStatus(res, emailResponse.data);
       } catch (error) {
         console.error(error);
@@ -48,5 +50,34 @@ module.exports = ({ config }) => {
     }
   })
 
+  msApi.post('/clear-cart', (req, res) => {
+    try {
+      try {
+        const cartId = req.body;
+        console.error('cartId', cartId);
+        const qouteResponse = axios.post(
+          'https://secure.w10.world/rest/default/V1/w10/clearcart',
+          cartId,
+          {
+            headers: {
+              'Content-type': 'application/json'
+            }
+          }
+        );
+        console.error('qouteResponse', qouteResponse.data);
+        apiStatus(res, qouteResponse.data);
+      } catch (error) {
+        console.error(error);
+        apiStatus(
+          res,
+          'This Some Error Occurred while processing contact us email',
+          500
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      apiStatus(res, 'That Some Error Occurred while sending contact us email', 500);
+    }
+  })
   return msApi
 }
