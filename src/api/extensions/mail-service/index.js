@@ -24,7 +24,6 @@ module.exports = ({ config }) => {
     try {
       try {
         const emailDetails = req.body;
-        console.error('emailDetails', emailDetails);
         const emailResponse = axios.post(
           'https://secure.w10.world/rest/default/V1/w10/contactus',
           emailDetails,
@@ -34,7 +33,6 @@ module.exports = ({ config }) => {
             }
           }
         );
-        console.error('emailResponse', emailResponse.data);
         apiStatus(res, emailResponse.data);
       } catch (error) {
         console.error(error);
@@ -79,5 +77,35 @@ module.exports = ({ config }) => {
       apiStatus(res, 'That Some Error Occurred while sending contact us email', 500);
     }
   })
+
+  msApi.post('/update', async (req, res) => {
+    try {
+      try {
+        const customerUpdateDetails = req.body;
+        let url = config.extensions.marketing.endpoint + '/rest/default/V1/w10/marketing';
+        const customerUpdateResponse = await axios.post(url,
+          customerUpdateDetails,
+          {
+            headers: {
+              'Content-type': 'application/json'
+            }
+          }
+        );
+        apiStatus(res, customerUpdateResponse.data);
+      } catch (error) {
+        apiStatus(
+          res,
+          {
+            message: 'Some Error Occurred while processing fetching customerUpdateResponse Url',
+            reqBody: req.body,
+            error
+          },
+          500
+        );
+      }
+    } catch (error) {
+      apiStatus(res, 'That Error Occurred while processing fetching customerUpdateResponse Url', 500);
+    }
+  });
   return msApi
 }
