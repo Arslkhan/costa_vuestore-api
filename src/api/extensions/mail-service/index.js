@@ -47,14 +47,42 @@ module.exports = ({ config }) => {
       apiStatus(res, 'That Some Error Occurred while sending contact us email', 500);
     }
   })
+
+  msApi.post('/clear-cart', (req, res) => {
+    try {
+      try {
+        const cartId = req.body;
+        console.error('cartId', cartId);
+        const qouteResponse = axios.post(
+          'https://secure.w10.world/rest/default/V1/w10/clearcart',
+          cartId,
+          {
+            headers: {
+              'Content-type': 'application/json'
+            }
+          }
+        );
+        console.error('qouteResponse', qouteResponse.data);
+        apiStatus(res, qouteResponse.data);
+      } catch (error) {
+        console.error(error);
+        apiStatus(
+          res,
+          'This Some Error Occurred while processing contact us email',
+          500
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      apiStatus(res, 'That Some Error Occurred while sending contact us email', 500);
+    }
+  })
+
   msApi.post('/update', async (req, res) => {
     try {
       try {
         const customerUpdateDetails = req.body;
-
         let url = config.extensions.marketing.endpoint + '/rest/default/V1/w10/marketing';
-        console.log('url', url);
-
         const customerUpdateResponse = await axios.post(url,
           customerUpdateDetails,
           {
@@ -63,11 +91,8 @@ module.exports = ({ config }) => {
             }
           }
         );
-        console.log(customerUpdateResponse);
         apiStatus(res, customerUpdateResponse.data);
-
       } catch (error) {
-        console.error(error);
         apiStatus(
           res,
           {
@@ -79,7 +104,6 @@ module.exports = ({ config }) => {
         );
       }
     } catch (error) {
-      console.error(error);
       apiStatus(res, 'That Error Occurred while processing fetching customerUpdateResponse Url', 500);
     }
   });
